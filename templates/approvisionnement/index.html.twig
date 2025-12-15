@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Approvisionnements{% endblock %}
+
+{% block body %}
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Gestion des Approvisionnements</h1>
+        <a href="#" class="btn btn-primary">+ Nouvel approvisionnement</a>
+    </div>
+
+    {# Cette section correspondrait aux Filtres et Recherche de votre maquette #}
+    <div class="card p-3 mb-4">
+        <h5>Filtres et recherche (Non fonctionnel pour l'instant)</h5>
+        {# Le formulaire de filtre irait ici (make:form nécessaire) #}
+        <p class="text-muted small">Les champs de recherche et de filtres ne sont pas encore implémentés.</p>
+    </div>
+
+    <h3>Liste des Approvisionnements</h3>
+    
+    {# Application des classes Bootstrap au tableau #}
+    <table class="table table-striped table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Référence</th>
+                <th>Date</th>
+                <th>Fournisseur</th>
+                <th>Articles</th>
+                <th class="text-end">Montant total</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for approvisionnement in approvisionnements %}
+            <tr>
+                <td>{{ approvisionnement.reference }}</td>
+                <td>{{ approvisionnement.dateCreation|date('d/m/Y') }}</td>
+                <td>{{ approvisionnement.fournisseur.nom }}</td> 
+                
+                {# Le décompte réel des articles nécessite une fonction dans l'entité Approvisionnement pour compter les LignesApprovisionnement #}
+                <td><span class="badge text-bg-info">? articles</span></td>
+                
+                {# Affichage du montant avec formatage monétaire #}
+                <td class="text-end">{{ approvisionnement.montantTotal|number_format(0, ',', ' ') }} FCFA</td>
+                
+                <td>
+                    {% set badge_class = approvisionnement.statut == 'Reçu' ? 'success' : 'warning' %}
+                    <span class="badge text-bg-{{ badge_class }}">{{ approvisionnement.statut }}</span>
+                </td>
+                
+                {# Boutons d'actions (Non fonctionnels pour l'instant) #}
+                <td>
+                    <a href="#" class="btn btn-sm btn-outline-info me-1"><i class="fas fa-eye"></i></a>
+                    <a href="#" class="btn btn-sm btn-outline-warning me-1"><i class="fas fa-edit"></i></a>
+                    <a href="#" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7" class="text-center">Aucun enregistrement trouvé.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    
+    {# Placeholder pour les statistiques clés (prochaine étape) #}
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card p-3 bg-primary text-white">Total des approvisionnements: 2 720 000 FCFA</div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 bg-success text-white">Nombre d'approvisionnements: 5</div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 bg-info text-white">Fournisseur principal: Textiles Dakar</div>
+        </div>
+    </div>
+
+{% endblock %}
